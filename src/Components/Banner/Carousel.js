@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core';
 import axios from 'axios';
 import { CryptoState } from '../../CryptoContext';
 import { TrendingCoins } from '../../config/api';
+import AliceCarousel from 'react-alice-carousel';
 
 const useStyles = makeStyles((theme) => ({
     carousel: {
@@ -28,8 +29,31 @@ const Carousel = () => {
         fetchTrendingCoins();
     }, [currency]);
 
+    const items = trending.map((coin) => {
+        
+    })
+    const responsive = {
+        0: {
+            items: 2,
+        },
+        512: {
+            items: 4,
+        },
+    };
+
   return (
-    <div className={classes.carousel}></div>
+    <div className={classes.carousel}>
+        <AliceCarousel 
+        mouseTracking
+        infinite
+        autoPlayInterval={1000}
+        animationDuration={1500}
+        disableDotsControls
+        responsive={responsive}
+        autoPlay
+        items={items}
+        />
+    </div>
   )
 }
 
