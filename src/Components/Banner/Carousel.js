@@ -11,6 +11,14 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
+    carouselItem: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        cursor: "pointer",
+        textTransform: "uppercase",
+        color: "gold",
+    }
 }));
 
 export function numberWithCommas(x) {
@@ -47,7 +55,9 @@ const Carousel = () => {
                 <span>
                     {coin?.symbol}
                     &nbsp;
-                    <span>
+                    <span style = {{
+                        color: profit>0 ? "lightgreen" : "red",
+                    }}>
                         {profit && "+"} {coin?.price_change_percentage_24h?.toFixed(2) +"%"}
                     </span>
                 </span>
