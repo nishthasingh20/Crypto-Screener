@@ -3,12 +3,13 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { CoinList } from '../config/api';
 import { CryptoState } from '../CryptoContext';
-import { Container, createTheme, Table, LinearProgress, TableCell, TableContainer, TableHead, TableRow, TextField, ThemeProvider, Typography, TableBody, makeStyles } from '@material-ui/core';
+import { Container, createTheme, Table, LinearProgress, TableCell, TableContainer, TableHead, TableRow, TextField, ThemeProvider, Typography, TableBody } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
 
 const CoinsTable = () => {
     const [coins, setCoins] = useState([]);
-    const[loading, setLoading] = useState(false);
-    const[search, setSearch] = useState(" ");
+    const [loading, setLoading] = useState(false);
+    const [search, setSearch] = useState("");
 
     const navigate = useNavigate();
 
@@ -32,21 +33,25 @@ const CoinsTable = () => {
             primary: {
                 main: "#fff",
             },
-            type: "dark",
+            mode: "dark",
         },
     });
 
     const handleSearch = () => {
         return coins.filter((coin) => (
-            coin.name.toLowerCase().includes(search) || coin.symbol.toLowerCase().includes(search)
+            coin.name.toLowerCase().includes(search.toLowerCase()) || coin.symbol.toLowerCase().includes(search.toLowerCase())
         ));
     };
 
-    const useStyles = makeStyles(() => ({}));
+    const StyledTableRow = styled(TableRow)({
+        cursor: "pointer",
+        "&:hover": {
+          backgroundColor: "#333",
+        },
+    });
 
-    const classes = useStyles();
-
-  return <ThemeProvider theme={darkTheme}>
+  return (
+  <ThemeProvider theme={darkTheme}>
     <Container style={{textAlign: "center"}}>
         <Typography
             variant='h4'
@@ -55,7 +60,20 @@ const CoinsTable = () => {
         </Typography>
 
         <TextField label="Search for a Crypto Currency" variant="outlined" 
-        style={{ marginBottom: 20, width: "100%"}}
+        InputProps={{
+            style: {
+                color: "white",
+            },
+            disalbeUnderline: true,
+        }}
+        InputLabelProps={{
+            style: { color: "gray" },
+        }}
+        style={{ 
+            marginBottom: 20, 
+            width: "100%", 
+            backgroundColor: "transparent", border: "1px solid white",
+        }}
         onChange={(e) => setSearch(e.target.value)}
         />
 
@@ -89,15 +107,37 @@ const CoinsTable = () => {
                                 const profit = row.price_change_percentage_24h > 0;
                                 return (
                                     <TableRow
-                                    onClicl={() => navigate.pushState(`/coins/${row.id}`)}
-                                    className={classes.row}
+                                    onClick={() => navigate(`/coins/${row.id}`)}
+                                    style={{ cursor: "pointer" }}
                                     key={row.name}
                                     >
-                                        <TableCell component='th' scope='row'
-                                        styles={{
-                                            display: "flex",
-                                            gap: 15,
-                                        }}>
+                                        <TableCell
+                                            component="th"
+                                            scope="row"
+                                            style={{
+                                                display: "flex",
+                                                gap: 15,
+                                            }}
+                                        >
+                                            <img 
+                                                src={row?.image}
+                                                alt={row.name}
+                                                height="50"
+                                                style={{ marginBottom: 10 }}
+                                            />
+                                            <div 
+                                                style={{ display: "flex", flexDirection: "column" }}
+                                            >
+                                                <span
+                                                    style={{
+                                                        textTransform: "uppercase",
+                                                        fontSize: 22,
+                                                    }}>
+                                                    {row.symbol}
+                                                </span>
+                                                <span style={{ color: "darkgrey" }}>{row.name}
+                                                </span>
+                                            </div>
                                         </TableCell>
                                     </TableRow>
                                 )
@@ -109,6 +149,7 @@ const CoinsTable = () => {
         </TableContainer>
     </Container>
   </ThemeProvider>
+  )
 };
 
 export default CoinsTable;
