@@ -6,11 +6,13 @@ import { CryptoState } from '../CryptoContext';
 import { Container, createTheme, Table, LinearProgress, TableCell, TableContainer, TableHead, TableRow, TextField, ThemeProvider, Typography, TableBody } from '@material-ui/core';
 import { styled } from '@mui/material/styles';
 import { numberWithCommas } from './Banner/Carousel';
+import { Pagination } from '@mui/material';
 
 const CoinsTable = () => {
     const [coins, setCoins] = useState([]);
     const [loading, setLoading] = useState(false);
     const [search, setSearch] = useState("");
+    const [page, setPage] = useState(1);
 
     const navigate = useNavigate();
 
@@ -34,7 +36,7 @@ const CoinsTable = () => {
             primary: {
                 main: "#fff",
             },
-            mode: "dark",
+            type: "dark",
         },
     });
 
@@ -104,7 +106,9 @@ const CoinsTable = () => {
                         </TableHead>
 
                         <TableBody>
-                            {handleSearch().map((row) => {
+                            {handleSearch()
+                            .slice((page - 1)*10, (page-1)*10 + 10)
+                            .map((row) => {
                                 const profit = row.price_change_percentage_24h > 0;
                                 return (
                                     <StyledTableRow
@@ -176,6 +180,23 @@ const CoinsTable = () => {
                 )
             }
         </TableContainer>
+
+        <Pagination
+        variant="outlined"
+        sx={{
+            padding: 2,
+            color: "white",
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            "& .MuiPaginationItem-root": { color: "gold",border: "1.5px solid white", borderColor: "white" }, // Ensures numbers are visible
+          }}
+            count ={(handleSearch()?.length/10).toFixed(0)}
+            onChange={(_, value) => {
+                setPage(value);
+                window.scroll(0, 450);
+            }}
+        />
     </Container>
   </ThemeProvider>
   )
