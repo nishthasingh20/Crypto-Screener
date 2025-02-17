@@ -5,6 +5,7 @@ import { CoinList } from '../config/api';
 import { CryptoState } from '../CryptoContext';
 import { Container, createTheme, Table, LinearProgress, TableCell, TableContainer, TableHead, TableRow, TextField, ThemeProvider, Typography, TableBody } from '@material-ui/core';
 import { styled } from '@mui/material/styles';
+import { numberWithCommas } from './Banner/Carousel';
 
 const CoinsTable = () => {
     const [coins, setCoins] = useState([]);
@@ -13,7 +14,7 @@ const CoinsTable = () => {
 
     const navigate = useNavigate();
 
-    const { currency } = CryptoState();
+    const { currency, symbol } = CryptoState();
 
     const fetchCoins = async () => {
         setLoading(true);
@@ -43,7 +44,7 @@ const CoinsTable = () => {
         ));
     };
 
-    const StyledTableRow = styled(TableRow)({
+    const StyledTableRow = styled(TableRow) ({
         cursor: "pointer",
         "&:hover": {
           backgroundColor: "#333",
@@ -106,7 +107,7 @@ const CoinsTable = () => {
                             {handleSearch().map((row) => {
                                 const profit = row.price_change_percentage_24h > 0;
                                 return (
-                                    <TableRow
+                                    <StyledTableRow
                                     onClick={() => navigate(`/coins/${row.id}`)}
                                     style={{ cursor: "pointer" }}
                                     key={row.name}
@@ -132,6 +133,7 @@ const CoinsTable = () => {
                                                     style={{
                                                         textTransform: "uppercase",
                                                         fontSize: 22,
+                                                        color: "white",
                                                     }}>
                                                     {row.symbol}
                                                 </span>
@@ -139,7 +141,34 @@ const CoinsTable = () => {
                                                 </span>
                                             </div>
                                         </TableCell>
-                                    </TableRow>
+
+                                        <TableCell 
+                                        align= 'right'
+                                        style={{color: "white"}}>
+                                            {symbol}{" "}
+                                            {numberWithCommas(row.current_price.toFixed(2))}
+                                        </TableCell>
+
+                                        <TableCell
+                                        align="right"
+                                        style={{
+                                            color: profit > 0 ? "lightgreen" : "red",
+                                            fontWeight: 500,
+                                        }}
+                                        >
+                                            {profit && "+"}
+                                            {row.price_change_percentage_24h.toFixed(2)}%
+                                        </TableCell>
+
+                                        <TableCell align='right'
+                                        style={{color: "white"}}>
+                                            {symbol}{" "}
+                                            {numberWithCommas(
+                                                row.market_cap.toString().slice(0, -6)
+                                            )}
+                                            M
+                                        </TableCell>
+                                    </StyledTableRow>
                                 )
                             })}
                         </TableBody>
