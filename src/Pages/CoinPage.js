@@ -15,6 +15,17 @@ const useStyles = makeStyles((theme) => ({
       alignItems: "center",
     },
   },
+  sidebar: {
+    width: "30%",
+    [theme.breakpoints.down("md")]: {
+      width: "100%",
+    },
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    marginTop: 25,
+    borderRight: "2px solid grey",
+  },
 }));
 
 const CoinPage = () => {
