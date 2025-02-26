@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { CryptoState } from '../CryptoContext';
 import axios from 'axios';
 import { HistoricalChart } from '../config/api';
-import { createTheme, makeStyles, ThemeProvider } from '@material-ui/core';
+import { CircularProgress, createTheme, LinearProgress, makeStyles, ThemeProvider } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -34,6 +34,8 @@ const CoinInfo = ({ coin }) => {
     setHistoricData(data.prices);
   };
 
+  console.log("data", historicData);
+
   useEffect(() => {
     fetchHistoricData();
   }, [currency, days]);
@@ -51,7 +53,25 @@ const CoinInfo = ({ coin }) => {
 
   return <ThemeProvider theme={darkTheme}>
     <div className = {classes.container}>
-      {/*chart*/}
+      {
+        !historicData ? (
+          <CircularProgress
+          style={{ color: "gold" }}
+          size={250}
+          thickness={1}
+          />
+        ):(
+        <>
+          <Line
+            data={{
+              labels: historicData.map(coin => {
+
+              })
+            }}
+            />
+        </>
+        )
+      }
 
       {/*buttons*/}
     </div>
