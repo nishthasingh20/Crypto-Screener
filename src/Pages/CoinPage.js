@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { CryptoState } from '../CryptoContext';
 import axios from 'axios';
@@ -60,28 +60,23 @@ const useStyles = makeStyles((theme) => ({
 const CoinPage = () => {
   const { id } = useParams();
   const [coin, setCoin] = useState();
-  const [loading, setLoading] = useState(true);
   const classes = useStyles();
   const { currency, symbol } = CryptoState();
 
-  const fetchCoin = async () => {
-    try {
-      const { data } = await axios.get(SingleCoin(id));
-      setCoin(data);
-    } catch (error) {
-      console.error("Error fetching coin:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const fetchCoin = useCallback(async () => {
+    const { data } = await axios.get(SingleCoin(id));
+    setCoin(data);
+  }, [id]);
+
+  console.log(coin);
 
   useEffect(() => {
     fetchCoin();
-  }, [id]);
+  }, [fetchCoin]);
 
-  if (loading) {
+  if (!coin) 
     return <LinearProgress style={{ backgroundColor: "gold" }} />;
-  }
+  
 
   return (
     <div className={classes.container}>
