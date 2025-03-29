@@ -4,6 +4,27 @@ import axios from 'axios';
 import { HistoricalChart } from '../config/api';
 import { CircularProgress, createTheme, LinearProgress, makeStyles, ThemeProvider } from '@material-ui/core';
 import { Line } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js';
+
+// Register ChartJS components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -73,7 +94,6 @@ const CoinInfo = ({ coin }) => {
                       : `${date.getHours()}:${date.getMinutes()} AM`;
                   return days === 1 ? time : date.toLocaleDateString();
                 }),
-
                 datasets: [
                   {
                     data: historicData.map((coin) => coin[1]),
@@ -83,11 +103,20 @@ const CoinInfo = ({ coin }) => {
                 ]
               }}
               options={{
+                responsive: true,
                 elements: {
                   point: {
                     radius: 1,
                   },
                 },
+                scales: {
+                  x: {
+                    display: true,
+                  },
+                  y: {
+                    display: true
+                  }
+                }
               }}
             />
           </>
