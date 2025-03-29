@@ -5,6 +5,7 @@ import axios from 'axios';
 import { SingleCoin } from "../config/api";
 import { Typography, LinearProgress, makeStyles } from '@material-ui/core';
 import { numberWithCommas } from '../Components/Banner/Carousel';
+import CoinInfo from '../Components/CoinInfo';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -134,6 +135,8 @@ const CoinPage = () => {
           </span>
         </div>
       </div>
+      {/*chart*/}
+      <CoinInfo coin = {coin} />
     </div>
   );
 };

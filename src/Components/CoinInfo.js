@@ -38,6 +38,7 @@ const CoinInfo = ({ coin }) => {
 
   useEffect(() => {
     fetchHistoricData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currency, days]);
 
   const darkTheme = createTheme({
@@ -80,6 +81,13 @@ const CoinInfo = ({ coin }) => {
                     borderColor: "#EEBC1D",
                   }
                 ]
+              }}
+              options={{
+                elements: {
+                  point: {
+                    radius: 1,
+                  },
+                },
               }}
             />
           </>
