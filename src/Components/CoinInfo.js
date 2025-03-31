@@ -14,6 +14,8 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
+import { chartDays } from '../config/data';
+import SelectButton from './SelectButton';
 
 // Register ChartJS components
 ChartJS.register(
@@ -119,6 +121,24 @@ const CoinInfo = ({ coin }) => {
                 }
               }}
             />
+            <div
+            style={{
+              display: "flex",
+              marginTop: 20,
+              justifyContent: "space-around",
+              width: "100%",
+
+            }}>
+              {chartDays.map((day) => (
+                <SelectButton
+                  key={day.value}
+                  onClick={() => setDays(day.value)}
+                  selected={day.value === days}
+                >
+                  {day.label}
+                </SelectButton>
+                ))}
+            </div>
           </>
         )}
       </div>
