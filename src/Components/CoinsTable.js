@@ -1,7 +1,5 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { CoinList } from '../config/api';
 import { CryptoState } from '../CryptoContext';
 import { Container, createTheme, Table, LinearProgress, TableCell, TableContainer, TableHead, TableRow, TextField, ThemeProvider, Typography, TableBody } from '@material-ui/core';
 import { styled } from '@mui/material/styles';
@@ -9,21 +7,12 @@ import { numberWithCommas } from './Banner/Carousel';
 import { Pagination } from '@mui/material';
 
 const CoinsTable = () => {
-    const [coins, setCoins] = useState([]);
-    const [loading, setLoading] = useState(false);
     const [search, setSearch] = useState("");
     const [page, setPage] = useState(1);
 
     const navigate = useNavigate();
 
-    const { currency, symbol } = CryptoState();
-
-    const fetchCoins = async () => {
-        setLoading(true);
-        const { data } = await axios.get(CoinList(currency));
-        setCoins(data);
-        setLoading(false);
-    };
+    const { currency, symbol, coins, loading, fetchCoins } = CryptoState();
 
     console.log(coins);
 
