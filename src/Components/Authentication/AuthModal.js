@@ -6,6 +6,11 @@ import { AppBar, Tabs, Tab } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Login from './Login';
 import SignUp from './Signup';
+import GoogleButton from 'react-google-button';
+import { GoogleAuthProvider } from 'firebase/auth';
+import { auth } from '../../firebase';
+import { CryptoState } from '../../CryptoContext';
+import { signInWithPopup } from 'firebase/auth';
 
 // Create styled components for the modal
 const ModalBox = styled(Box)(({ theme }) => ({
@@ -49,6 +54,16 @@ const StyledTab = styled(Tab)({
   },
 });
 
+const GoogleBox = styled(Box)({
+  padding: 24,
+  paddingTop: 0,
+  display: 'flex',
+  flexDirection: 'column',
+  textAlign: 'center',
+  gap: 20,
+  fontSize: 20,
+});
+
 export default function AuthModal() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -57,6 +72,28 @@ export default function AuthModal() {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+
+  const { setAlert } = CryptoState();
+
+  const googleProvider = new GoogleAuthProvider();
+
+  const signInWithGoogle = () => {
+    signInWithPopup(auth, googleProvider).then(res => {
+      setAlert({
+        open: true,
+        message: `Sign Up Successful. Welcome ${res.user.email}`,
+        type: "success",
+      });
+      handleClose();
+    }).catch(error => {
+      setAlert({
+        open: true,
+        message: error.message,
+        type: "error",
+      });
+      return;
+    })
   };
 
   return (
@@ -96,8 +133,16 @@ export default function AuthModal() {
           </StyledAppBar>
           
           {/* Add your login/signup forms here based on the value */}
-          {value === 0 && <Login/>}
-          {value === 1 && <SignUp/>}
+          {value === 0 && <Login handleClose={handleClose}/>}
+          {value === 1 && <SignUp handleClose={handleClose}/>}
+
+          <GoogleBox>
+            <span>OR</span>
+            <GoogleButton 
+            style={{width: "100%", outline: "none"}}
+            onClick={signInWithGoogle}            
+            />
+          </GoogleBox>
 
         </ModalBox>
       </StyledModal>

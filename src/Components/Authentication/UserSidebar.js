@@ -3,9 +3,11 @@ import Drawer from '@mui/material/Drawer';
 import { CryptoState } from '../../CryptoContext';
 import { Avatar, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { signOut } from 'firebase/auth';
+import { auth } from '../../firebase';
 
 const Container = styled('div')({
-    width: 350,
+    width: 320,
     padding: 25,
     height: "100%",
     display: "flex",
@@ -40,14 +42,28 @@ const LogOutButton = styled(Button)({
   backgroundColor: "#EEBC1D",
 });
 
-const logOut = () => {};
+const Watchlist = styled('div')({
+  fontSize: 15,
+  textShadow: "0 0 5px black",
+  color: "white",
+  flex: 1,
+  width: "100%",
+  display: "flex",
+  padding: 10,
+  alignItems: "center",
+  flexDirection: "column",
+  gap: 12,
+  backgroundColor: "grey",
+  borderRadius: 10,
+  overflowY: "scroll",
+});
 
 
 export default function UserSidebar() {
   const [state, setState] = React.useState({
     right: false,
   });
-  const { user } = CryptoState();
+  const { user, setAlert } = CryptoState();
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -55,6 +71,16 @@ export default function UserSidebar() {
     }
 
     setState({ ...state, [anchor]: open });
+  };
+
+  const logOut = () => {
+    signOut(auth);
+    setAlert({
+      open: true,
+      message: "Logged out successfully",
+      type: "success",
+    });
+    toggleDrawer(false);
   };
 
   return (
@@ -95,6 +121,9 @@ export default function UserSidebar() {
                   >
                     {user.displayName || user.email}
                   </span>
+                  <Watchlist>
+                    Watchlist
+                  </Watchlist>
                 </Profile>
                 <LogOutButton
                 variant='outlined'
